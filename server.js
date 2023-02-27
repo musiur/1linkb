@@ -4,8 +4,8 @@ const cors = require("cors");
 const app = express();
 
 var corsOptions = {
-  // origin: "http://localhost:3000"
-  origin: "https://1linkf.vercel.app"
+  origin: "http://localhost:3000"
+  // origin: "https://1linkf.vercel.app"
 };
 
 app.use(cors(corsOptions));
