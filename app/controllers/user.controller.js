@@ -16,9 +16,16 @@ exports.allAccess = (req, res) => {
 
 
 exports.userBoard = (req, res) => {
-  User.findOne({_id: "63f52aa29f997a9ccc44a1e0"}, (err, users) => {
-    res.status(200).send(users)
-  })
+  try {
+    User.find({roles: "63f5bf453e570110746d80af"}, (err, users) => {
+      if(err){
+        res.status(404).send(err)
+      }
+      res.status(200).send({userList: users})
+    })
+  } catch (error) {
+    res.status(500).send("Something went wrong!")
+  }
 };
 
 exports.adminBoard = (req, res) => {
