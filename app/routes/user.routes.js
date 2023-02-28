@@ -10,12 +10,12 @@ module.exports = function(app) {
     next();
   });
 
-  app.get("/api/test/all", controller.allAccess);
+  app.get("/api/user/all", controller.all);
 
   app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
 
   app.get(
-    "/api/test/mod",
+    "/api/test/moderator",
     [authJwt.verifyToken, authJwt.isModerator],
     controller.moderatorBoard
   );
@@ -25,4 +25,12 @@ module.exports = function(app) {
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.adminBoard
   );
+
+  app.put(
+    "/api/test/user/update/:id",
+    [authJwt.verifyToken],
+    controller.update
+  );
+
+  app.delete("/api/test/user/delete/:username/:id", controller.delete);
 };

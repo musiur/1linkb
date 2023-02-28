@@ -10,9 +10,9 @@ module.exports = function(app) {
     next();
   });
 
-  // app.get("/api/links", controller.allAccess);
-  app.post("/api/links/create", controller.create);
-
-  // app.get("/api/links/signle", [authJwt.verifyToken], controller.userBoard);
+  app.get("/api/links", [authJwt.verifyToken, authJwt.isModerator], controller.get);
+  app.post("/api/links/create", [authJwt.verifyToken], controller.create);
+  app.put("/api/links/update/:id", controller.update);
+  app.delete("/api/links/delete/:id", [authJwt.verifyToken], controller.delete);
 
 };

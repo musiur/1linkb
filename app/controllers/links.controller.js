@@ -1,29 +1,61 @@
+const Links = require('../models/links.model');
 
-const db = require("../models");
-const Links = db.links;
+exports.create = async (req, res) => {
+    const newLink = new Links(req.body);
+    await newLink.save((err) => {
+        if(err){
+            res.status(500).send({
+                message: "Something went wrong!"
+            })
+        }else{
+            res.status(200).send("Link created successfully!")
+        }
+    })
+}
 
-exports.create = (req, res) => {
-    console.log(req)
-    // try {
-    //     Links.find({ link: req.body.link }, (err, links) => {
-    //         if (!err) {
-    //             res.status(409).send("Link not available!")
-    //         } else {
-    //             Links.create({ link: req.body.link, username: req.body.link }, (err1, result) => {
-    //                 if (err1) {
-    //                     console.log(err1)
-    //                     res.status(500).send("Internal server error!")
-    //                 } else {
-    //                     res.status(200).send("Link created successfully!")
-    //                 }
-    //             })
-    //         }
+exports.get = async (req, res) => {
+    await Links.find({}, (err, result) =>{
+        if(err){
+            res.status(500).send({
+                message: "Something went wrong!"
+            })
+        }else{
+            res.status(200).send({
+                message: "Links fetched successfully!",
+                result
+            })
+        }
+    })
+}
 
-    //     });
-    // } catch (error) {
-    //     console.log("---->", error)
-    //     res.status(500).send("Internal server error!")
-    // }
+exports.update = async (req, res) => {
+    await Links.updateOne({_id: req.params.id}, {pathname: req.body.pathname}, (err, result) => {
+        if(err){
+            res.status(500).send({
+                message: "Something went wrong!"
+            })
+        }else{
+            res.status(200).send({
+                message: "Link udpated successfully!",
+                result
+            })
+        }
+    })
+}
+
+exports.delete = async (req, res) => {
+    await Links.updateOne({_id: req.params.id}, (err, result) => {
+        if(err){
+            res.status(500).send({
+                message: "Something went wrong!"
+            })
+        }else{
+            res.status(200).send({
+                message: "Link deleted successfully!",
+                result
+            })
+        }
+    })
 }
 
 

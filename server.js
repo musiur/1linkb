@@ -4,8 +4,8 @@ const cors = require("cors");
 const app = express();
 
 var corsOptions = {
-  // origin: "http://localhost:3000"
-  origin: "https://1linkf.vercel.app"
+  origin: "http://localhost:3000"
+  // origin: "https://1linkf.vercel.app"
 };
 
 app.use(cors(corsOptions));
@@ -21,9 +21,9 @@ const Role = db.role;
 
 // .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
 db.mongoose.connect(`mongodb+srv://opu:opu@cluster0.bui2xrz.mongodb.net/bookcover?retryWrites=true&w=majority`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
   .then(() => {
     console.log("Successfully connect to MongoDB.");
     initial();
@@ -35,7 +35,7 @@ db.mongoose.connect(`mongodb+srv://opu:opu@cluster0.bui2xrz.mongodb.net/bookcove
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
+  res.json({ message: "Welcome to unknown application." });
 });
 
 // routes
@@ -43,6 +43,15 @@ require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/links.routes")(app);
 
+
+// default error handler
+const errorHandler = (err, req, res, next) => {
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  res.status(500).json({ error: err });
+}
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

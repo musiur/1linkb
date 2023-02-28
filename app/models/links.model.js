@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Links = mongoose.model(
   "Links",
   new mongoose.Schema({
-    title: String,
+    pathname: String,
     username: String, 
   })
 );
