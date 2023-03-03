@@ -11,7 +11,8 @@ module.exports = function(app) {
   });
 
   app.get("/api/links", [authJwt.verifyToken, authJwt.isModerator], controller.get);
-  app.post("/api/links/create", [authJwt.verifyToken], controller.create);
+  app.post("/api/links/create", controller.create);
+  app.get("/api/links/availability/:pathName", controller.availability);
   app.put("/api/links/update/:id", controller.update);
   app.delete("/api/links/delete/:id", [authJwt.verifyToken], controller.delete);
 

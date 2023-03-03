@@ -1,14 +1,22 @@
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 const app = express();
 
 var corsOptions = {
+<<<<<<< HEAD
   // origin: "http://localhost:3000"
   origin: "https://1linkf.vercel.app"
+=======
+  origin: "http://localhost:3000",
+  // origin: "https://1linkf.vercel.app"
+>>>>>>> 3233b3138301f26d46a282e31b4261a5c6371960
 };
 
 app.use(cors(corsOptions));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 // parse requests of content-type - application/json
 app.use(express.json());
@@ -20,15 +28,19 @@ const db = require("./app/models");
 const Role = db.role;
 
 // .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
-db.mongoose.connect(`mongodb+srv://opu:opu@cluster0.bui2xrz.mongodb.net/bookcover?retryWrites=true&w=majority`, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
+db.mongoose
+  .connect(
+    `mongodb+srv://opu:opu@cluster0.bui2xrz.mongodb.net/bookcover?retryWrites=true&w=majority`,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => {
     console.log("Successfully connect to MongoDB.");
     initial();
   })
-  .catch(err => {
+  .catch((err) => {
     console.error("Connection error", err);
     process.exit();
   });
@@ -42,7 +54,7 @@ app.get("/", (req, res) => {
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/links.routes")(app);
-
+require("./app/routes/editor.routes")(app);
 
 // default error handler
 const errorHandler = (err, req, res, next) => {
@@ -51,7 +63,7 @@ const errorHandler = (err, req, res, next) => {
   }
 
   res.status(500).json({ error: err });
-}
+};
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
@@ -62,8 +74,8 @@ function initial() {
   Role.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
       new Role({
-        name: "user"
-      }).save(err => {
+        name: "user",
+      }).save((err) => {
         if (err) {
           console.log("error", err);
         }
@@ -72,8 +84,8 @@ function initial() {
       });
 
       new Role({
-        name: "moderator"
-      }).save(err => {
+        name: "moderator",
+      }).save((err) => {
         if (err) {
           console.log("error", err);
         }
@@ -82,8 +94,8 @@ function initial() {
       });
 
       new Role({
-        name: "admin"
-      }).save(err => {
+        name: "admin",
+      }).save((err) => {
         if (err) {
           console.log("error", err);
         }
