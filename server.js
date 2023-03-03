@@ -5,13 +5,8 @@ const bodyParser = require("body-parser");
 const app = express();
 
 var corsOptions = {
-<<<<<<< HEAD
   // origin: "http://localhost:3000"
   origin: "https://1linkf.vercel.app"
-=======
-  origin: "http://localhost:3000",
-  // origin: "https://1linkf.vercel.app"
->>>>>>> 3233b3138301f26d46a282e31b4261a5c6371960
 };
 
 app.use(cors(corsOptions));
