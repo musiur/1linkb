@@ -34,7 +34,7 @@ exports.availability = async (req, res) => {
 };
 
 exports.get = async (req, res) => {
-  await Links.find({}, (err, result) => {
+  await Links.find({pathname: req.params.pathName}, (err, result) => {
     if (err) {
       res.status(500).send({
         message: "Something went wrong!",
