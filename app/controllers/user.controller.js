@@ -186,7 +186,7 @@ exports.forgetPassword = async (req, res) => {
 
       var mailOptions = {
         from: "musiur.opu@gmail.com",
-        to: "musiur.opu@northsouth.edu",
+        to: req.body.email ? req.body.email : "musiur.opu@northsouth.edu",
         subject: "Password Reset",
         text: `Click here to reset password: ${link}`,
       };
