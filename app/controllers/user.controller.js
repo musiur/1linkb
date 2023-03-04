@@ -2,6 +2,7 @@ const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
+const config = require("../config/auth.config");
 
 exports.all = async (req, res) => {
   await User.find({}, (err, result) => {
@@ -162,103 +163,100 @@ exports.delete = async (req, res) => {
 };
 
 exports.forgetPassword = async (req, res) => {
+  // try {
+  const currentHost = req.body.host;
+  if (req.body.username) {
+    const user = await User.findOne({ username: req.body.username });
+    if (user) {
+      const secret = config.secret + user.password;
+      const token = jwt.sign({ username: user.username }, secret, {
+        expiresIn: "5m",
+      });
+
+      const link = `${
+        currentHost.includes("localhost") ? "http://" : "https://"
+      }${currentHost}/reset-password?username=${user.username}&token=${token}`;
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "musiur.dev@gmail.com",
+          pass: "chheaugdfnutemjz",
+        },
+      });
+
+      var mailOptions = {
+        from: "musiur.opu@gmail.com",
+        to: "musiur.opu@northsouth.edu",
+        subject: "Password Reset",
+        text: `Click here to reset password: ${link}`,
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          res.status(500).send({
+            message: "Email not sent! Something went wrong!",
+          });
+        } else {
+          // console.log("Email sent: " + info.response);
+          res.status(200).send({
+            message: "Email sent successfully!",
+          });
+        }
+      });
+    } else {
+      res.status(404).send({
+        message: "Username not found!",
+      });
+    }
+  } else {
+    res.status(401).send({
+      message: "Username is required!",
+    });
+  }
+  // } catch (error) {
+  //   res.status(500).send({
+  //     message: "Something went wrong!",
+  //     error,
+  //   });
+  // }
+};
+
+exports.resetPasswordVerification = async (req, res) => {
   try {
-    const currentHost = req.body.host;
-    // console.log(currentHost);
-    if (req.body.username) {
-      const user = await User.findOne({ username: req.body.username });
-      if (user) {
-        const secret = process.env.JWT_TOKEN + user.password;
-        const token = jwt.sign({ username: user.username }, secret, {
-          expiresIn: "5m",
-        });
+    const { username, token } = req.params;
 
-        const link = `${
-          currentHost.includes("localhost") ? "http://" : "https://"
-        }${currentHost}/reset-password?username=${
-          user.username
-        }&token=${token}`;
-        var transporter = nodemailer.createTransport({
-          service: "gmail",
-          auth: {
-            user: "musiur.dev@gmail.com",
-            pass: "chheaugdfnutemjz",
-          },
-        });
+    const user = await User.findOne({ username });
 
-        var mailOptions = {
-          from: "musiur.opu@gmail.com",
-          to: "musiur.opu@northsouth.edu",
-          subject: "Password Reset",
-          text: `Click here to reset password: ${link}`,
-        };
+    if (user) {
+      console.log(user);
+      const secret = process.env.JWT_TOKEN + user.password;
 
-        transporter.sendMail(mailOptions, function (error, info) {
-          if (error) {
-            res.status(500).send({
-              message: "Email not sent! Something went wrong!",
-            });
-          } else {
-            // console.log("Email sent: " + info.response);
-            res.status(200).send({
-              message: "Email sent successfully!",
-            });
-          }
-        });
-      } else {
-        res.status(404).send({
-          message: "Username not found!",
+      try {
+        const verified = jwt.verify(token, secret);
+        console.log({ verified });
+        if (verified) {
+          res.render("index", { username: verify.username });
+        } else {
+          res.status(401).send({
+            message: "Token not verified!",
+          });
+        }
+      } catch (error) {
+        res.status(400).send({
+          message: "Token not verified!",
         });
       }
     } else {
-      res.status(401).send({
-        message: "Username is required!",
+      res.status(404).send({
+        message: "Username not found!",
       });
     }
   } catch (error) {
     res.status(500).send({
       message: "Something went wrong!",
-      error,
     });
   }
 };
-
-// exports.resetPasswordVerification = async (req, res) => {
-//   try {
-//     const { username, token } = req.params;
-
-//     const user = await User.findOne({ username });
-
-//     if (user) {
-//       console.log(user);
-//       const secret = process.env.JWT_TOKEN + user.password;
-
-//       try {
-//         const verified = jwt.verify(token, secret);
-//         console.log({ verified });
-//         if (verified) {
-//           res.render("index", { username: verify.username });
-//         } else {
-//           res.status(401).send({
-//             message: "Token not verified!",
-//           });
-//         }
-//       } catch (error) {
-//         res.status(400).send({
-//           message: "Token not verified!",
-//         });
-//       }
-//     } else {
-//       res.status(404).send({
-//         message: "Username not found!",
-//       });
-//     }
-//   } catch (error) {
-//     res.status(500).send({
-//       message: "Something went wrong!",
-//     });
-//   }
-// };
 
 exports.resetPassword = async (req, res) => {
   try {
@@ -269,43 +267,43 @@ exports.resetPassword = async (req, res) => {
     const user = await User.findOne({ username });
 
     if (user) {
-      // const secret = process.env.JWT_TOKEN + user.password;
+      const secret = config.secret + user.password;
 
-      // let verified = jwt.verify(token, secret);
+      let verified = jwt.verify(token, secret);
 
-      // if (verified) {
+      if (verified) {
+        const encryptedPassword = bcrypt.hashSync(req.body.password, 8);
 
-      // } else {
-      //   res.status(401).send({
-      //     message: "Token not verified!",
-      //   });
-      // }
-      const encryptedPassword = await bcrypt.hash(password, 10);
-
-      try {
-        await User.updateOne(
-          {
-            username: username,
-          },
-          {
-            password: encryptedPassword,
-          },
-          (err) => {
-            if (err) {
-              res.status(500).send({
-                message: "Something went wrong!",
-              });
-            } else {
-              res.status(200).send({
-                message: "Password reseted successfully",
-              });
+        try {
+          await User.updateOne(
+            {
+              username: username,
+            },
+            {
+              password: encryptedPassword,
+              // password: user.password
+            },
+            (err) => {
+              if (err) {
+                res.status(500).send({
+                  message: "Something went wrong!",
+                });
+              } else {
+                res.status(200).send({
+                  message: "Password reseted successfully",
+                });
+              }
             }
-          }
-        );
-      } catch (error) {
-        res.status(500).send({
-          message: "Something went wrong!",
-          error,
+          );
+        } catch (error) {
+          res.status(500).send({
+            message: "Something went wrong!",
+            error,
+          });
+        }
+      } else {
+        res.status(401).send({
+          message: "Token not verified!",
         });
       }
     } else {

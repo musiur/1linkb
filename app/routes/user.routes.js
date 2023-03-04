@@ -35,6 +35,6 @@ module.exports = function(app) {
   app.delete("/api/test/user/delete/:username/:id", controller.delete);
 
   app.post("/api/test/user/forget-password", controller.forgetPassword);
-  // app.get("/api/test/user/reset-password/:username/:token", controller.resetPasswordVerification);
+  app.get("/api/test/user/reset-password/:username/:token", controller.resetPasswordVerification);
   app.post("/api/test/user/reset-password/:username/:token", controller.resetPassword);
 };
