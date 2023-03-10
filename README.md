@@ -69,5 +69,3 @@ npm install
 node server.js
 ```
 # backend-template-with-express-mongoose
-# 1linkb
-# 1linkb
