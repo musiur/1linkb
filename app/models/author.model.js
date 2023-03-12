@@ -5,7 +5,7 @@ const Editor = mongoose.model(
   new mongoose.Schema({
     username: String,
     bio: String,
-    blogs: Array
+    blogs: [Object]
   })
 );
 

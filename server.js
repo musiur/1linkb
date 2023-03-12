@@ -9,7 +9,6 @@ var corsOptions = {
   // origin: "https://1linkf.vercel.app"
 };
 
-app.set("view engine", "ejs")
 app.use(cors(corsOptions));
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
