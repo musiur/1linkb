@@ -51,6 +51,7 @@ require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/links.routes")(app);
 require("./app/routes/editor.routes")(app);
+require("./app/routes/author.routes")(app);
 
 // default error handler
 const errorHandler = (err, req, res, next) => {
