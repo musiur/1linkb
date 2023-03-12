@@ -5,8 +5,8 @@ const bodyParser = require("body-parser");
 const app = express();
 
 var corsOptions = {
-  // origin: "http://localhost:3000"
-  origin: "https://1linkf.vercel.app"
+  origin: "http://localhost:3000"
+  // origin: "https://1linkf.vercel.app"
 };
 
 app.set("view engine", "ejs")
@@ -51,6 +51,7 @@ require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/links.routes")(app);
 require("./app/routes/editor.routes")(app);
+require("./app/routes/author.routes")(app);
 
 // default error handler
 const errorHandler = (err, req, res, next) => {

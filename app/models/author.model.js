@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
 
 const Editor = mongoose.model(
-  "Editor",
+  "Author",
   new mongoose.Schema({
     username: String,
-    editorData: Object
+    bio: String,
+    blogs: Array
   })
 );
 
