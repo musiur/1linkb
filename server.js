@@ -5,8 +5,8 @@ const bodyParser = require("body-parser");
 const app = express();
 
 var corsOptions = {
-  // origin: "http://localhost:3000"
-  origin: "https://1linkf.vercel.app"
+  origin: "http://localhost:3000"
+  // origin: "https://1linkf.vercel.app"
 };
 
 app.set("view engine", "ejs")
