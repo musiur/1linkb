@@ -60,3 +60,110 @@ exports.create = async (req, res) => {
     });
   }
 };
+
+exports.update = async (req, res) => {
+  try{
+    await Author.find({username: req.body.username}, (err, data) => {
+      if(err){
+        res.status(500).send({
+          message: "Something went wrong!"
+        })
+      }else{
+        if(data.length){
+          const updateAuthorData = async () => {
+            await Author.updateOne({username: req.body.username}, req.body, (err1) => {
+              if(err1){
+                res.status(500).send({
+                  message: "Something went wrong!"
+                })
+              }else{
+                res.status(200).send({
+                  message: "Data updated successfully!"
+                })
+              }
+            })
+          }
+
+          updateAuthorData();
+
+        }else{
+          res.status(404).send({
+            message: "Data not found!"
+          })
+        }
+      }
+    })
+  }catch(error){
+    res.status(500).send({
+      message: "Something went wrong!"
+    })
+  }
+}
+
+exports.get = async (req, res) => {
+  try{
+    await Author.findOne({username: req.body.username}, (err, data) =>{
+      if(err){
+        res.status(500).send({
+          message: "Something went wrong!"
+        })
+      }else{
+        console.log(data)
+        if(data){
+          res.status(200).send({
+            message: "Data fetch successfully!",
+            data
+          })
+        }else{
+          res.status(404).send({
+            message: "Data not found!"
+          })
+        }
+      }
+    })
+  }catch(error){
+    res.status(500).send({
+      message: "Something went wrong!"
+    })
+  }
+}
+
+exports.delete = async (req, res) => {
+  const deleteAuthorData = async () => {
+    await Author.deleteOne({ username: req.body.username }, (err, result) => {
+      if (err) {
+        res.status(500).send({
+          message: "Something went wrong!",
+        });
+      } else {
+        res.status(200).send({
+          message: "Link deleted successfully!",
+          result,
+        });
+      }
+    });
+  }
+
+  try{
+    await Author.findOne({username: req.body.username}, (err, data) =>{
+      if(err){
+        res.status(500).send({
+          message: "Something went wrong!"
+        })
+      }else{
+        if(data){
+          deleteAuthorData();
+        }else{
+          res.status(404).send({
+            message: "Data not found!"
+          })
+        }
+      }
+    })
+  }catch(error){
+    res.status(500).send({
+      message: "Something went wrong!"
+    })
+  }
+  
+};

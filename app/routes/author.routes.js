@@ -10,9 +10,8 @@ module.exports = function (app) {
     next();
   });
 
-//   app.get("/api/links/:pathName", controller.get);
+  app.get("/api/author/", controller.get);
   app.post("/api/author/create", controller.create);
-//   app.get("/api/links/availability/:pathName", controller.availability);
-//   app.put("/api/links/update/:id", controller.update);
-//   app.delete("/api/links/delete/:id", controller.delete);
+  app.put("/api/author/update", controller.update);
+  app.delete("/api/author/delete", controller.delete);
 };

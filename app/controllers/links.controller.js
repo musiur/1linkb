@@ -68,7 +68,7 @@ exports.update = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-  await Links.updateOne({ _id: req.params.id }, (err, result) => {
+  await Links.deleteOne({ _id: req.params.id }, (err, result) => {
     if (err) {
       res.status(500).send({
         message: "Something went wrong!",
