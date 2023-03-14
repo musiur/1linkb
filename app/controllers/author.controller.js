@@ -187,7 +187,12 @@ exports.mailing = async (req, res) => {
         from,
         to,
         subject,
-        text: message,
+        text: `
+          Hi ${to},
+          ${message}
+          
+          -${from}
+        `,
       };
 
       transporter.sendMail(mailOptions, function (error) {
