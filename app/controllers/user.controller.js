@@ -320,3 +320,32 @@ exports.resetPassword = async (req, res) => {
     });
   }
 };
+
+exports.data = async (req, res) => {
+  try {
+    console.log(req.body)
+    await User.findOne({ username: req.body.username }, (err, data) => {
+      if (err) {
+        res.status(500).send({
+          message: "Something went wrong!",
+        });
+      } else {
+        console.log(data)
+        if (data) {
+          res.status(200).send({
+            message: "User data fetch successfully!",
+            data,
+          });
+        } else {
+          res.status(404).send({
+            message: "User not found!",
+          });
+        }
+      }
+    });
+  } catch (error) {
+    res.status(500).send({
+      message: "Something went wrong!",
+    });
+  }
+};

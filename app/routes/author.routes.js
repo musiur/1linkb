@@ -10,8 +10,9 @@ module.exports = function (app) {
     next();
   });
 
-  app.get("/api/author/", controller.get);
+  app.post("/api/author", controller.get);
   app.post("/api/author/create", controller.create);
   app.put("/api/author/update", controller.update);
   app.delete("/api/author/delete", controller.delete);
+  app.post("/api/author/mail", controller.mailing);
 };

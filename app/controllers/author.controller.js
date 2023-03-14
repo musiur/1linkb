@@ -1,5 +1,6 @@
 const Author = require("../models/author.model");
 const User = require("../models/user.model");
+const nodemailer = require("nodemailer");
 
 exports.create = async (req, res) => {
   try {
@@ -102,6 +103,7 @@ exports.update = async (req, res) => {
 
 exports.get = async (req, res) => {
   try{
+    console.log(req.body)
     await Author.findOne({username: req.body.username}, (err, data) =>{
       if(err){
         res.status(500).send({
@@ -167,3 +169,59 @@ exports.delete = async (req, res) => {
   }
   
 };
+
+exports.mailing = async (req, res) => {
+  try{
+    const {username, to, subject, message, from, name} = req.body;
+
+    const SendMail = () => {
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "musiur.dev@gmail.com",
+          pass: "chheaugdfnutemjz",
+        },
+      });
+
+      var mailOptions = {
+        from,
+        to,
+        subject,
+        text: message,
+      };
+
+      transporter.sendMail(mailOptions, function (error) {
+        if (error) {
+          res.status(500).send({
+            message: "Email not sent! Something went wrong!",
+          });
+        } else {
+          res.status(200).send({
+            message: "Email sent successfully!",
+          });
+        }
+      });
+    }
+
+    await User.findOne({username}, (err, data) => {
+      if(err){
+        res.status(500).send({
+          message: "Something went wrong!"
+        })
+      }else{
+        if(data){
+          SendMail();
+        }else{
+          res.status(404).send({
+            message: "User not found!"
+          })
+        }
+      }
+    })
+
+  }catch(error){
+    res.status(500).send({
+      message: "Something went wrong!"
+    })
+  }
+}

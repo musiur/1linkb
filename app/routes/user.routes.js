@@ -37,4 +37,6 @@ module.exports = function(app) {
   app.post("/api/test/user/forget-password", controller.forgetPassword);
   app.get("/api/test/user/reset-password/:username/:token", controller.resetPasswordVerification);
   app.post("/api/test/user/reset-password/:username/:token", controller.resetPassword);
+
+  app.post("/api/test/user/data", controller.data)
 };
