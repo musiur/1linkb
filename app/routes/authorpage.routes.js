@@ -10,8 +10,9 @@ module.exports = function (app) {
     next();
   });
 
-  app.get("/api/authorpage/", controller.get);
+  app.get("/api/authorpage/:username", controller.get);
   app.post("/api/authorpage/create", controller.create);
+  app.put("/api/authorpage/update", controller.update);
 //   app.get("/authorpage", controller.availability);
 //   app.put("/authorpage", controller.update);
 //   app.delete("/authorpage", controller.delete);
