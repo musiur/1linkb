@@ -2,14 +2,14 @@ const Authorpage = require("../models/authorpage.model");
 
 exports.get = async (req, res) => {
   console.log(req.params);
-  await Authorpage.find({ username: req.params.username }, (err, result) => {
+  await Authorpage.find({ pathname: req.params.pathname }, (err, result) => {
     if (err) {
       res.status(500).send({
         message: "Something went wrong!",
       });
     } else {
       res.status(200).send({
-        message: "Links fetched successfully!",
+        message: "Author page data fetched successfully!",
         result,
       });
     }
@@ -32,7 +32,8 @@ exports.create = async (req, res) => {
   };
 
   const CheckIfUsernameAlreadyUsedOrNot = async () => {
-    await Authorpage.find({ username: req.body.username }, (err, result) => {
+
+    await Authorpage.find({ pathname: req.body.pathname }, (err, result) => {
       if (err) {
         res.status(500).send({
           message: "Something went wrong!",
@@ -41,13 +42,13 @@ exports.create = async (req, res) => {
         !result.length
           ? CreateNewAuthorHomePageData()
           : res.status(409).send({
-              message: "Username already used!",
+              message: "Link path already used!",
             });
       }
     });
   };
 
-  req.body.username
+  req.body.pathname && req.body.username
     ? CheckIfUsernameAlreadyUsedOrNot()
     : res.status(401).send({
         message: "Bad Request!",
@@ -57,7 +58,7 @@ exports.create = async (req, res) => {
 exports.update = (req, res) => {
   const UpdateAuthorHomePageData = async () => {
     await Authorpage.updateOne(
-      { username: req.body.username },
+      { pathname: req.body.pathname },
       req.body,
       (err, result) => {
         if (err) {
@@ -75,7 +76,7 @@ exports.update = (req, res) => {
   };
 
   const CheckIfUsernameAlreadyUsedOrNot = async () => {
-    await Authorpage.find({ username: req.body.username }, (err, result) => {
+    await Authorpage.find({ pathname: req.body.pathname }, (err, result) => {
       if (err) {
         res.status(500).send({
           message: "Something went wrong!",
@@ -90,7 +91,7 @@ exports.update = (req, res) => {
     });
   };
 
-  req.body.username
+  req.body.pathname
     ? CheckIfUsernameAlreadyUsedOrNot()
     : res.status(401).send({
         message: "Bad Request!",

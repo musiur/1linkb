@@ -11,6 +11,7 @@ module.exports = function (app) {
   });
 
   app.get("/api/links/:pathName", controller.get);
+  app.get("/api/links/getpath/:username", controller.getusername);
   app.post("/api/links/create", controller.create);
   app.get("/api/links/availability/:pathName", controller.availability);
   app.put("/api/links/update/:id", controller.update);
