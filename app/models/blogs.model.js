@@ -9,7 +9,7 @@ const Blogs = mongoose.model(
     subTitle: {type:String, required: true}, 
     shortDescription: {type:String, required: true},
     image: {type:String, required: true},
-    details: {type:{}, required: true}
+    details: {type:String, required: true}
   })
 );
 
