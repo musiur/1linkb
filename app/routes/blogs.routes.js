@@ -11,8 +11,8 @@ module.exports = function (app) {
   });
 
   app.get("/api/blogs/all", controller.getAll);
+  app.get("/api/blogs/:username/:pathname", controller.getSpecific);
   app.post("/api/blogs/create", controller.create);
   app.put("/api/blogs/update", controller.update);
   app.delete("/api/blogs/delete/:_id", controller.delete);
-  //   app.post("/api/blogs/mail", controller.mailing);
 };

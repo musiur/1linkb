@@ -21,17 +21,43 @@ exports.getAll = async (req, res) => {
   });
 };
 
+exports.getSpecific = async (req, res) => {
+  const username = req.params.username;
+  const pathname = req.params.pathname;
+  await Blogs.find({username, pathname}, (err, result) => {
+    if (err) {
+      res.status(500).send({
+        message: "Something went wrong!",
+      });
+    } else {
+      if (result.length) {
+        res.status(200).send({
+          message: "Blogs fetched successfully!",
+          result,
+        });
+      } else {
+        res.status(404).send({
+          message: "No blogs found!",
+        });
+      }
+    }
+  });
+};
+
 exports.create = async (req, res) => {
   const createNewBlog = async () => {
     const newBlog = new Blogs(req.body);
-    await newBlog.save((err) => {
+    await newBlog.save((err, result) => {
       if (err) {
         console.log(err);
         res.status(500).send({
           message: "Something went wrong!",
         });
       } else {
-        res.status(200).send("Author page data created successfully!");
+        res.status(200).send({
+          message: "Blog create successfully!",
+          result
+        });
       }
     });
   };

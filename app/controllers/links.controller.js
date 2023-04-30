@@ -129,7 +129,13 @@ exports.getusername = async (req, res) => {
         message: "Something went wrong!",
       });
     } else {
-      res.status(200).send(result[0].pathname);
+      if (result.length) {
+        res.status(200).send(result[0].pathname);
+      } else {
+        res.status(404).send({
+          message: "No link found!",
+        });
+      }
     }
   });
 };
