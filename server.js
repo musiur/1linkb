@@ -52,15 +52,10 @@ require("./app/routes/links.routes")(app);
 require("./app/routes/editor.routes")(app);
 require("./app/routes/author.routes")(app);
 require("./app/routes/authorpage.routes")(app);
+require("./app/routes/blogs.routes")(app);
 
-// default error handler
-const errorHandler = (err, req, res, next) => {
-  if (res.headersSent) {
-    return next(err);
-  }
 
-  res.status(500).json({ error: err });
-};
+
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
