@@ -24,7 +24,29 @@ exports.getAll = async (req, res) => {
 exports.getSpecific = async (req, res) => {
   const username = req.params.username;
   const pathname = req.params.pathname;
-  await Blogs.find({username, pathname}, (err, result) => {
+  await Blogs.find({ username, pathname }, (err, result) => {
+    if (err) {
+      res.status(500).send({
+        message: "Something went wrong!",
+      });
+    } else {
+      if (result.length) {
+        res.status(200).send({
+          message: "Blogs fetched successfully!",
+          result,
+        });
+      } else {
+        res.status(404).send({
+          message: "No blogs found!",
+        });
+      }
+    }
+  });
+};
+
+exports.getByPathname = async (req, res) => {
+  const pathname = req.params.pathname;
+  await Blogs.find({ pathname }, (err, result) => {
     if (err) {
       res.status(500).send({
         message: "Something went wrong!",
@@ -56,7 +78,7 @@ exports.create = async (req, res) => {
       } else {
         res.status(200).send({
           message: "Blog create successfully!",
-          result
+          result,
         });
       }
     });
@@ -112,45 +134,44 @@ exports.update = async (req, res) => {
       });
 };
 
-
 exports.delete = async (req, res) => {
-    const _id = req.params._id;
-  
-    const deleteBlog = async () => {
-      await Blogs.deleteOne({ _id }, (err) => {
-        if (err) {
-          res.status(500).send({
-            message: "Something went wrong!",
-          });
-        } else {
-          res.status(200).send({
-            message: "Blogs deleted successfully!",
-          });
-        }
-      });
-    };
-  
-    const CheckBlogsExistance = async () => {
-      await Blogs.find({ _id }, (err, result) => {
-        if (err) {
-          res.status(500).send({
-            message: "Something went wrong!",
-          });
-        } else {
-          if (result.length) {
-            deleteBlog();
-          } else {
-            res.status(404).send({
-              message: "No blogs found!",
-            });
-          }
-        }
-      });
-    };
-  
-    _id
-      ? CheckBlogsExistance()
-      : res.status(401).send({
-          message: "Bad Request!",
+  const _id = req.params._id;
+
+  const deleteBlog = async () => {
+    await Blogs.deleteOne({ _id }, (err) => {
+      if (err) {
+        res.status(500).send({
+          message: "Something went wrong!",
         });
+      } else {
+        res.status(200).send({
+          message: "Blogs deleted successfully!",
+        });
+      }
+    });
   };
+
+  const CheckBlogsExistance = async () => {
+    await Blogs.find({ _id }, (err, result) => {
+      if (err) {
+        res.status(500).send({
+          message: "Something went wrong!",
+        });
+      } else {
+        if (result.length) {
+          deleteBlog();
+        } else {
+          res.status(404).send({
+            message: "No blogs found!",
+          });
+        }
+      }
+    });
+  };
+
+  _id
+    ? CheckBlogsExistance()
+    : res.status(401).send({
+        message: "Bad Request!",
+      });
+};

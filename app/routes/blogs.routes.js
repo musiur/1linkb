@@ -11,6 +11,7 @@ module.exports = function (app) {
   });
 
   app.get("/api/blogs/all", controller.getAll);
+  app.get("/api/blogs/:pathname", controller.getByPathname);
   app.get("/api/blogs/:username/:pathname", controller.getSpecific);
   app.post("/api/blogs/create", controller.create);
   app.put("/api/blogs/update", controller.update);
