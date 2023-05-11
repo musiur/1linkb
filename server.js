@@ -54,6 +54,7 @@ require("./app/routes/author.routes")(app);
 require("./app/routes/authorpage.routes")(app);
 require("./app/routes/blogs.routes")(app);
 require("./app/routes/books.routes")(app);
+require("./app/routes/newsletters.routes")(app);
 
 
 
