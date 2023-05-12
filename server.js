@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:3000"
+  origin: "http://localhost:3000",
   // origin: "https://1linkf.vercel.app"
 };
 
@@ -57,8 +57,6 @@ require("./app/routes/books.routes")(app);
 require("./app/routes/newsletters.routes")(app);
 require("./app/routes/giveway.routes")(app);
 
-
-
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
@@ -100,3 +98,10 @@ function initial() {
     }
   });
 }
+
+process.on("uncaughtException", function (err) {
+  console.log({
+    type: "Unhandled error",
+    error: err,
+  });
+});
