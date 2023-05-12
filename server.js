@@ -5,8 +5,8 @@ const bodyParser = require("body-parser");
 const app = express();
 
 var corsOptions = {
-  // origin: "http://localhost:3000"
-  origin: "https://1linkf.vercel.app"
+  origin: "http://localhost:3000"
+  // origin: "https://1linkf.vercel.app"
 };
 
 app.use(cors(corsOptions));
@@ -54,6 +54,8 @@ require("./app/routes/author.routes")(app);
 require("./app/routes/authorpage.routes")(app);
 require("./app/routes/blogs.routes")(app);
 require("./app/routes/books.routes")(app);
+require("./app/routes/newsletters.routes")(app);
+require("./app/routes/giveway.routes")(app);
 
 
 
