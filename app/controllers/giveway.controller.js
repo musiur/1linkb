@@ -10,17 +10,19 @@ exports.get = async (req, res) => {
     } else {
       if (result.length) {
         res.status(200).send({
-          message: "Email fetch successful!",
+          message: "Giveway resources fetch successful!",
           result,
         });
       } else {
-        res.status(400).send({
-          message: "No emails are available!",
+        res.status(404).send({
+          message: "Giveway resources are not available!",
         });
       }
     }
   });
 };
+
+
 
 // creating giveway container for individual author
 exports.create = (req, res) => {
@@ -71,10 +73,10 @@ exports.create = (req, res) => {
 
 // updating giveway container for individual author
 exports.update = (req, res) => {
-  const UpdateGiveway = async (data) => {
+  const UpdateGiveway = async () => {
     await Giveway.updateOne(
       { pathname: req.body.pathname },
-      data,
+      req.body,
       (err, result) => {
         if (err) {
           console.log(err);
