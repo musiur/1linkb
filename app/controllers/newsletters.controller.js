@@ -54,9 +54,6 @@ exports.create = (req, res) => {
           });
         } else {
           AddNewsletters();
-          // res.status(200).send({
-          //     message: "Can create new newsletter!"
-          // })
         }
       }
     });
